@@ -122,7 +122,7 @@ class Listing {
       hostUser: "host_user",
       photoUrl: "photo_url",
     });
-    console.log("whereClause, filterValues", whereClause, filterValues);
+    // console.log("whereClause, filterValues", whereClause, filterValues);
 
     const listingsRes = await db.query(
       `
@@ -177,9 +177,10 @@ class Listing {
       [listing_id]
     );
 
-    const listing = listingRes.rows;
+    const listing = listingRes.rows[0];
+    console.log("listing from GETLISTID ======>>>>>", listing)
 
-    if (!listing) throw new NotFoundError(`No listing: ${listing_id}`);
+    if (!listingRes.rows.length) throw new NotFoundError(`No listing: ${listing_id}`);
 
     return listing;
   }
