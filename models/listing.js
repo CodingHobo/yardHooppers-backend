@@ -70,6 +70,7 @@ class Listing {
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING
                 listing_id,
+                title,
                 host_user,
                 price,
                 city,
@@ -77,7 +78,17 @@ class Listing {
                 zipcode,
                 description,
                 photo_url`,
-      [host_user, title, price, city, state, zipcode, address, description, photo_url]
+      [
+        host_user,
+        title,
+        price,
+        city,
+        state,
+        zipcode,
+        address,
+        description,
+        photo_url,
+      ]
     );
     const listing = result.rows[0];
 
@@ -117,6 +128,7 @@ class Listing {
       `
         SELECT listing_id,
         host_user,
+        title,
         price,
         city,
         state,
@@ -152,6 +164,7 @@ class Listing {
       `
       SELECT
             listing_id,
+            title,
             host_user,
             price,
             city,
@@ -185,7 +198,8 @@ class Listing {
 
   static async get(username) {
     const listingRes = await db.query(
-          `SELECT listing_id,
+      `SELECT listing_id,
+                  title,
                   price,
                   description,
                   photo_url,
@@ -240,6 +254,7 @@ class Listing {
         WHERE listing_id = ${listingIdVarIdx}
         RETURNING
         listing_id,
+        title,
         host_user,
         price,
         description,
