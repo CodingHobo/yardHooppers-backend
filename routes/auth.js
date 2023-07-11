@@ -20,7 +20,6 @@ const { BadRequestError } = require("../expressError");
  */
 
 router.post("/token", async function (req, res, next) {
-  console.log("req.body ======> ", req.body);
   const validator = jsonschema.validate(req.body, userAuthSchema, {
     required: true,
   });
@@ -32,9 +31,7 @@ router.post("/token", async function (req, res, next) {
   const { username, password } = req.body;
 
   const user = await User.authenticate(username, password);
-  console.log("useruseruser", user);
   const token = createToken(user);
-  console.log("tokentoken", token);
   return res.json({ token });
 });
 

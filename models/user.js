@@ -60,8 +60,6 @@ class User {
    * Throws UnauthorizedError is user not found or wrong password.
    **/
   static async getUserdata(username) {
-console.log("GETUSERDATAGETUSERDATAGETUSERDATA", username)
-
     const userRes = await db.query(
       `
       SELECT u.username,
