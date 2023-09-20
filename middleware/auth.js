@@ -65,11 +65,11 @@ function ensureAdmin(req, res, next) {
 async function ensureCorrectUserOrAdmin( req, res, next) {
   const user = res.locals.user;
   const username = res.locals.user?.username;
-  
+
   try {
     const listing = await Listing.getListId(req.params.listing_id);
 
-    if (username && ( username === listing[0].host_user )) {
+    if (username && ( username === listing.host_user )) {
       return next();
     }
 
