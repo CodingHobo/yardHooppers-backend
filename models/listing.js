@@ -288,33 +288,4 @@ class Listing {
   }
 }
 
-/**static sqlWhereClause(filterBy, jsToSql) {
-  let keys = Object.keys(filterBy);
-  if (keys.length === 0) {
-    return { whereClause: "", filterValues: [] };
-  }
-
-  // Add %% to description, city and state search query
-  if ("descriptionLike" in filterBy) {
-    filterBy["descriptionLike"] = "%" + filterBy["descriptionLike"] + "%";
-  }
-  if ("city" in filterBy) {
-    filterBy["city"] = "%" + filterBy["city"] + "%";
-  }
-  if ("state" in filterBy) {
-    filterBy["state"] = "%" + filterBy["state"] + "%";
-  }
-
-  // sqlClauses is an array of strings that can proceed WHERE in an SQL query
-  const sqlClauses = keys.map(
-    (colName, idx) => `${jsToSql[colName]} ILIKE $${idx + 1}`
-  );
-
-  return {
-    whereClause: "WHERE " + sqlClauses.join(" AND "),
-    filterValues: Object.values(filterBy),
-  };
-}
- */
-
 module.exports = Listing;
