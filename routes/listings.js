@@ -49,36 +49,40 @@ const router = new express.Router();
  * Authorization required: token (registered user)
  */
 
-router.post(
-  "/",
-  ensureLoggedIn,
-  upload.single("photo"),
+router.post("/", ensureLoggedIn, upload.single("photo"),
   async function (req, res, next) {
-    const validator = jsonschema.validate(req.body, listingNewSchema, {
-      required: true,
-    });
-    if (!validator.valid) {
+    const validator = jsonschema.validate(
+      req.body,
+      listingNewSchema,
+      { required: true });
+
+  if (!validator.valid) {
       const errs = validator.errors.map((e) => e.stack);
-      throw new BadRequestError(errs);
-    }
-
-    // Call the uploadPhoto helper function and add the returned URL to the request body
-    try {
-      const uploadedImage = await uploadPhoto(
-        req.file.buffer,
-        req.file.originalname
-      );
-      if (uploadedImage && uploadedImage.photo_url) {
-        req.body.photo_url = uploadedImage.photo_url;
-      }
-    } catch (error) {
-      return next(error);
-    }
-
-    const listing = await Listing.create(req.body);
-    return res.status(201).json({ listing });
+      return next(new BadRequestError(errs));
   }
-);
+
+  try {
+    const uploadedImage = await uploadPhoto(
+      req.file.buffer,
+      req.file.originalname);
+
+      if (uploadedImage && uploadedImage.photo_url) {
+          req.body.photo_url = uploadedImage.photo_url;
+      }
+
+      const listing = await Listing.create(req.body);
+      return res.status(201).json({ listing });
+  } catch (err) {
+      if (err.message.includes("Duplicate listing")) {
+        return res.status(400).json({
+          error:
+            "Duplicate listing at this address"
+        });
+      }
+      return next(err); // For all other errors, forward them to the global error handler
+  }
+});
+
 
 /** GET /  =>
  * [{ listing_id,
